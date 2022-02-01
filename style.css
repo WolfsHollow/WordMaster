@@ -1,77 +1,91 @@
 body{
-    display: flex;
-    flex-flow: column;
-    gap: 10px;
-    background: linear-gradient(#141e30, #243b55);
-    align-items: center;
-    justify-content: center;
-  }
-  
-  #guessContainer{
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    height: 600px;
-    width: 450px;
-    background-color: white;
-  }
-  
-  #keyboardContainer{
-    height: 400px;
-    width: 800px;
-    background-color: white;
-  }
-  
-  .wordContainer{
-    border: 2px solid black;
-    background-color: blue;
-    display: flex;
-    height: 80px;
-    width: 400px;
-  }
-  
-  .letterBox{
-    height: 80px;
-    width: 80px;
-    background-color: red;
-    border: 2px solid black;
-    font-size: 4rem;
-    text-align: center;
-    color: white;
-  }
-  
-  .keyboard{
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    background-color: green;
-    height: 400px;
-    width: 800px;
-    gap: 20px;
-  }
-  
-  .row{
-    display: flex;
-    border: 2px solid black;
-    width: 800px;
-    height: 80px;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .key {
-    height: 80px;
-    width: 80px;
-    background-color: blue;
-    font-size: 4rem;
-    text-align: center;
-    color: white;
-    border-radius: 20px;
-  }
-  
-  .key:hover{
-    background-color: purple;
-  }
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
+  background: linear-gradient(#141e30, #243b55);
+  align-items: center;
+  justify-content: center;
+}
+
+#guessContainer{
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  height: 600px;
+  width: 450px;
+  background-color: linear-gradient(#141e30, #243b55);
+}
+
+#keyboardContainer{
+  height: 400px;
+  width: 800px;
+  background-color: linear-gradient(#141e30, #243b55)
+}
+
+.wordContainer{
+/*   border: 2px solid black; */
+/*   background-color: blue; */
+  display: flex;
+  height: 90px;
+  width: 450px;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.letterBox{
+  height: 80px;
+  width: 80px;
+  background-color: linear-gradient(#141e30, #243b55);
+  border: 2px solid #E6E6E6;
+  font-size: 4rem;
+  text-align: center;
+  color: white;
+}
+
+.keyboard{
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  background-color: linear-gradient(#141e30, #243b55);
+  height: 300px;
+  width: 800px;
+  gap: 20px;
+}
+
+.row{
+  display: flex;
+/*   border: 2px solid black; */
+  width: 800px;
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.key {
+  height: 80px;
+  width: 80px;
+  background-color: lightgrey;
+  font-size: 4rem;
+  text-align: center;
+  color: black;
+  border-radius: 20px;
+}
+
+.bigKey{
+  height: 80px;
+  width: 160px;
+  background-color: lightgrey;
+  font-size: 4rem;
+  text-align: center;
+  color: black;
+  border-radius: 20px;
+}
+
+.bigKey:hover , .key:hover{
+  background-color: purple;
+}
