@@ -7,6 +7,27 @@ body{
   justify-content: center;
 }
 
+
+#displayMessage {
+  display: none;
+  z-index: 5;
+  position: absolute;
+  top: 50px;
+  justify-content: center;
+  align-self: center;
+  height: 50px;
+  width: 400px;
+  line-height: 50px;
+  background-color: black;
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+}
+
+#displayMessage.show {
+  display: flex;
+}
+
 #guessContainer{
   display: flex;
   flex-flow: column;
@@ -36,6 +57,7 @@ body{
 }
 
 .letterBox{
+  z-index: 0;
   height: 80px;
   width: 80px;
   background-color: linear-gradient(#141e30, #243b55);
@@ -88,4 +110,35 @@ body{
 
 .bigKey:hover , .key:hover{
   background-color: purple;
+  cursor: pointer;
+}
+
+/* Animations */
+.flipLetter {
+  perspective: 1000px;
+  animation-name: flipLetter;
+  animation-duration: .6s;
+  transform: rotateX(0deg);
+}
+
+.shakeWord{
+  animation: .1s linear 0s 5 alternate slidein;
+}
+
+@keyframes slidein{
+  from {
+    margin-left: 10px;
+    width: 300%;
+  }
+
+  to  {
+    margin-right: 10px;
+    width: 100%;
+  }
+}
+
+@keyframes flipLetter{
+  50%{
+    transform: rotateX(90deg);
+  }
 }

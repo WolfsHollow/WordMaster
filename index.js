@@ -2,6 +2,7 @@
 const page = document.getElementById('page');
 const guessContainer = document.getElementById('guessContainer');
 const keyboardContainer = document.getElementById('keyboardContainer');
+let displayMessage = document.getElementById('displayMessage');
 
 let guessArray = [];
 let guessDivArray = [];
@@ -22,7 +23,7 @@ wordList[4] = ["eager","eagle","eared","earls","early","earns","earth","eased","
 wordList[5] = ["fable","faced","facer","faces","facet","facia","facts","faded","fader","fades","faery","fails","faint","fairs","fairy","faith","faked","faker","fakes","fakie","fakir","falls","famed","fancy","fangs","fanny","farce","fared","fares","farms","farts","fasts","fatal","fated","fates","fatso","fatty","fatwa","fault","fauna","fauns","favas","faves","favor","fawns","faxed","faxes","fazed","fazes","fears","feast","feats","fecal","feces","feeds","feels","feign","feint","fella","fells","felon","felts","femme","femur","fence","fends","feral","feria","ferns","ferny","ferry","fests","fetal","fetch","feted","fetes","fetid","fetus","feuds","fever","fewer","fiats","fiber","fibre","fiche","ficus","fiefs","field","fiend","fiery","fifes","fifth","fifty","fight","filch","filed","filer","files","filet","fills","filly","films","filmy","filth","final","finca","finch","finds","fined","finer","fines","finis","finks","fiord","fired","fires","firms","first","fishy","fists","fitly","fiver","fives","fixed","fixer","fixes","fizzy","fjord","flack","flags","flail","flair","flake","flaky","flame","flank","flans","flaps","flare","flash","flask","flats","flaws","flays","fleas","fleck","flees","fleet","flesh","flick","flier","flies","fling","float","flood","floor","flour","flown","flows","fluid","flyer","focal","focus","folks","fonts","foods","force","forms","forth","forty","forum","found","frame","fraud","fresh","fried","fries","front","frost","fruit","fuels","fully","funds","funny"];
 wordList[6] = ["gains","games","gamma","gases","gates","gauge","gears","genes","genre","ghost","giant","gifts","girls","given","gives","gland","glass","globe","glory","gloss","glove","glued","goals","goats","going","goods","grace","grade","grain","grams","grand","grant","grape","graph","grasp","grass","grave","great","greek","green","greet","grief","grill","grind","grips","gross","group","grove","grown","grows","guard","guess","guest","guide","guild","guilt"];
 wordList[7] = ["habit","hairs","halls","hands","handy","hangs","happy","harsh","hated","hates","haven","hawks","heads","heard","heart","heavy","hedge","heels","hello","helps","hence","herbs","highs","hills","hints","hired","hobby","holds","holes","holly","homes","honey","honor","hooks","hoped","hopes","horns","horse","hosts","hotel","hours","house","hover","human","humor","hurts"];
-wordList[8] = ["icons","ideal","ideas","idiot","image","imply","inbox","incur","index","indie","inner","input","intro","issue","items"];
+wordList[8] = ["icons","ideal","ideas","idiot","image","imply","inbox","incur","index","indie","inner","input","intro","issue","items", "ivory"];
 wordList[9] = ["jeans","jelly","jewel","joins","joint","jokes","judge","juice","juicy","jumps"];
 wordList[10] = ["keeps","kicks","kills","kinda","kinds","kings","knees","knife","knock","knots","known","knows"];
 wordList[12] = ["label","labor","lacks","lakes","lamps","lands","lanes","large","laser","lasts","later","laugh","layer","leads","leaks","learn","lease","least","leave","legal","lemon","level","lever","light","liked","likes","limbs","limit","lined","linen","liner","lines","links","lions","lists","lived","liver","lives","loads","loans","lobby","local","locks","lodge","logic","logos","looks","loops","loose","lords","loses","loved","lover","loves","lower","loyal","lucky","lunar","lunch","lungs","lying"];
@@ -91,26 +92,28 @@ function keyboardSetup(){
 }
 
 function processKeyEvent(event){
-  keyPressed = event.key;
-  if (event.key === undefined){
-    keyPressed = event.target.innerText;
-  }
-  if (keyPressed == 'Enter'){
-    submitWord();
-    return;
-  }
-  if (keyPressed == 'Backspace' || keyPressed == 'Back'){
-    previousBox()
-    return;
-  }
-  else if (currentGuess.length <5){
-    if (disabledKeys.includes(keyPressed)){
-      console.log('that not allowed');
+  if (guessNum <=5){
+    keyPressed = event.key;
+    if (event.key === undefined){
+      keyPressed = event.target.innerText;
+    }
+    if (keyPressed == 'Enter'){
+      submitWord();
       return;
     }
-    else{
-      displayKey(keyPressed);
-      nextBox();
+    if (keyPressed == 'Backspace' || keyPressed == 'Back'){
+      previousBox()
+      return;
+    }
+    else if (currentGuess.length <5){
+      if (disabledKeys.includes(keyPressed)){
+        console.log('that not allowed');
+        return;
+      }
+      else{
+        displayKey(keyPressed);
+        nextBox();
+      }
     }
   }
 }
@@ -138,7 +141,10 @@ function displayKey(key){ // put keypress in box
 function checkWord(){
   giveHints();
   if (currentGuess == word){    
-    alert('you win');
+    displayText('You win!');
+  }
+  else if (guessNum == 5){
+    displayText(`The word was ${word}`);
   }
 }
 
@@ -160,27 +166,45 @@ function giveHints(){
       color = 'grey'
       
     }
-    currentLetterBox.style.backgroundColor = color;
-    keyDiv.style.backgroundColor = color;
+        
+    
     console.log(keyDiv.style.border);
-    currentLetterBox.style.border = `2px solid ${color}`;
+    let card = currentLetterBox;
+    let cardColor = color;
+    let keyboardKey = keyDiv;
+    setTimeout(()=>{card.classList.add('flipLetter');
+                    card.style.backgroundColor = cardColor;
+                    card.style.border = `2px solid ${cardColor}`;
+                    keyboardKey.style.backgroundColor = cardColor;
+                  }
+              , 300*i);
+        
     firstLetterBox +=1;
   }
 }
 
 function submitWord(){
   if (currentGuess.length == 5){
-      checkWord();
-      guessNum+=1;
-      currentGuess = '';
-      currentBoxNum = guessNum*5;
-      currentLetterBox = letterBox[currentBoxNum];
-      return;
-    }
-    else{
-      alert('not enough letters in word');
-      return;
-    }
+    checkWord();
+    guessNum+=1;
+    currentGuess = '';
+    currentBoxNum = guessNum*5;
+    currentLetterBox = letterBox[currentBoxNum];
+    return;
+  }
+  else{
+    displayText('Not enough letters in word');
+    let wordContainer = currentLetterBox.parentElement;
+    wordContainer.classList.remove('shakeWord');
+    setTimeout(()=>{wordContainer.classList.add('shakeWord')}, 100); 
+    return;
+  }
+}
+
+function displayText(message){
+  displayMessage.innerText = message;
+  displayMessage.classList.add('show');
+  setTimeout(()=>{displayMessage.classList.remove('show')}, 2000);
 }
 
 setup();
