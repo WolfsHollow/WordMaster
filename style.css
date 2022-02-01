@@ -7,7 +7,6 @@ body{
   justify-content: center;
 }
 
-
 #displayMessage {
   display: none;
   z-index: 5;

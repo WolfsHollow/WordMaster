@@ -84,21 +84,20 @@ function getRandomNumber(min,max){ //taken from internet
 }
 
 function keyboardSetup(){
-
   let keyBox = document.getElementsByClassName('key');
   for (let i = 0; i<keyBox.length; i++){
     keyBox[i].addEventListener('click', (event)=>{processKeyEvent(event)});
   } 
 }
 
-function processKeyEvent(event){
+async function processKeyEvent(event){
   if (guessNum <=5){
     keyPressed = event.key;
     if (event.key === undefined){
       keyPressed = event.target.innerText;
     }
     if (keyPressed == 'Enter'){
-      submitWord();
+      await submitWord();
       return;
     }
     if (keyPressed == 'Backspace' || keyPressed == 'Back'){
@@ -183,8 +182,8 @@ function giveHints(){
   }
 }
 
-function submitWord(){
-  if (currentGuess.length == 5){
+async function submitWord(){  
+  if (currentGuess.length == 5 && await performGetRequest1()){
     checkWord();
     guessNum+=1;
     currentGuess = '';
@@ -192,11 +191,16 @@ function submitWord(){
     currentLetterBox = letterBox[currentBoxNum];
     return;
   }
-  else{
+  else if (currentGuess.length != 5){
     displayText('Not enough letters in word');
     let wordContainer = currentLetterBox.parentElement;
     wordContainer.classList.remove('shakeWord');
     setTimeout(()=>{wordContainer.classList.add('shakeWord')}, 100); 
+    return;
+  }
+  else {
+    console.log(currentGuess.length, await performGetRequest1());
+    displayText('not a word');
     return;
   }
 }
@@ -212,3 +216,19 @@ setup();
 window.addEventListener("keydown", (event)=>{ //process keypresses
  processKeyEvent(event)    
 }, true);
+
+async function performGetRequest1() {
+  let doesExist;
+  await axios.get(`http://localhost:3000/wordexists/${currentGuess}`).then((response) => {
+    console.log(response.data == "word does exist");
+    doesExist = response.data == "word does exist"; 
+    }).catch((response) => {
+    /**
+     * You can do whatever here.
+     * More than likely means ur internet is down. Or the server is down
+     */
+  });
+  return doesExist;
+}
+
+
