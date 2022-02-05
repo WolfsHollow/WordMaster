@@ -36,6 +36,7 @@ let isKeyboardActive = true;
 
 const WORD_LENGTH = 5;
 const GUESSES = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const disabledKeys = ['Escape', 'Tab', 'Shift', 'CapsLock', 'Control', 'Meta', 'Alt', 'ContentMenu', 'NumLock', 'ScrollLock', 'Pause', 'Delete', 'End', 'PageDown', 'PageUp', 'Home', 'Insert', 'ArrowUp', 'ArrowLeft', 'ArrowDown','ArrowRight', '*', '+', ' ','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12', '`', '1','2','3','4','5','6','7','8','9','0','-', "`","'", '=', '[',']', '\\', ';', '/', '.', '\,'];
 
 // setup wordlist; not exhaustive list yet
@@ -212,12 +213,19 @@ function giveHints(){ // colors keys and boxes for hints
 
 function submitWord(){  
   if (currentGuess.length == 5){
-    checkWord();
-    guessNum+=1;
-    currentGuess = '';
-    currentBoxNum = guessNum*5;
-    currentLetterBox = letterBox[currentBoxNum];
+    let isWord = validateGuess();
+    if (isWord){
+      checkWord();
+      guessNum+=1;
+      currentGuess = '';
+      currentBoxNum = guessNum*5;
+      currentLetterBox = letterBox[currentBoxNum];
+      return;
+    }
+    else {
+      displayText('not a word');
     return;
+    }
   }
   else if (currentGuess.length != 5){
     displayText('Not enough letters in word');
@@ -226,10 +234,13 @@ function submitWord(){
     setTimeout(()=>{wordContainer.classList.add('shakeWord')}, 100); 
     return;
   }
-  else {
-    displayText('not a word');
-    return;
-  }
+}
+
+function validateGuess(){
+  let firstLetter = currentGuess[0];
+  let letterIndex = ALPHABET.indexOf(firstLetter);
+  console.log(currentGuess, currentGuess[0], letterIndex);
+  return completeWordList[letterIndex].includes(currentGuess);
 }
 
 function displayText(message){ 
