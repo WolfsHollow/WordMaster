@@ -68,7 +68,7 @@ wordList[24] = ["yacht","yards","years","yeast","yield","young","yours","youth",
 // wordList[25] = []
 
 
-function setup(){ //setup area for guesses, keyboard, get word
+function setup(){
   for (let j = 0; j<GUESSES*WORD_LENGTH; j++){
       letterBox[j] = document.createElement('div');
       letterBox[j].classList.add('letterBox');
@@ -91,7 +91,7 @@ function setup(){ //setup area for guesses, keyboard, get word
   console.log(word);
 }
 
-function getWord(){ // uses RNG to get word from wordlist
+function getWord(){ 
   let randomLetterIndex = getRandomNumber(0,25);
   let listLength = wordList[randomLetterIndex].length;
   let randomWordIndex = getRandomNumber(0, listLength);
@@ -118,7 +118,7 @@ function keypressEvent(event){
   processKeyEvent(event);
 }
 
-async function processKeyEvent(event){ // processes key input from off/onscreen keyboard
+async function processKeyEvent(event){ 
   if (guessNum <=5){
     keyPressed = event.key;
     if (event.key === undefined){
@@ -145,12 +145,12 @@ async function processKeyEvent(event){ // processes key input from off/onscreen 
   }
 }
 
-function nextBox(){ // move to next box
+function nextBox(){ 
   currentBoxNum +=1;
   currentLetterBox = letterBox[currentBoxNum];
 }
 
-function previousBox(){ //move to previous box and clear it
+function previousBox(){ 
   if (!currentGuess == ''){
     currentBoxNum -=1;
     currentLetterBox = letterBox[currentBoxNum];
@@ -159,13 +159,13 @@ function previousBox(){ //move to previous box and clear it
   }
 }
 
-function displayKey(key){ // put keypress in box
+function displayKey(key){ 
   key = key.toUpperCase();
   currentLetterBox.innerText = key;
   currentGuess += key;
 }
 
-function checkWord(){ // check word and give hints
+function checkWord(){ 
   giveHints();
   if (currentGuess == word){    
     displayText('You win!');
@@ -233,7 +233,7 @@ async function submitWord(){
   }
 }
 
-function displayText(message){ //takes message and displays on overlay div
+function displayText(message){ 
   displayMessage.innerText = message;
   displayMessage.classList.add('show');
   setTimeout(()=>{displayMessage.classList.remove('show')}, 2000);
@@ -253,14 +253,17 @@ async function performGetRequest1() {
   return doesExist;
 }
 
-function generateSeed(letterNum, wordNum){
+function generateSeed(letterNum, wordNum){ 
   
   let wordNumDigits;
   wordNum = wordNum.toString();
   
+  //insert random numbers to obscure word letter
   let firstRanDigits = getRandomNumber(1,10);  
   let secondRanDigits = getRandomNumber(0,10);
   let thirdRanDigits = getRandomNumber(0,10);
+
+  //add 0's to keep number length
   let letterNumDigits = ("0" + letterNum).slice(-2);
   if (wordNum.length == 1){
     wordNumDigits = ("00" + wordNum).slice(-3);
@@ -272,6 +275,7 @@ function generateSeed(letterNum, wordNum){
     wordNumDigits = wordNum;
   }
   
+  //put seed together, X###XX##X
   let seed = firstRanDigits + wordNumDigits + secondRanDigits + letterNumDigits + thirdRanDigits;
   
   return seed;
@@ -298,7 +302,7 @@ function toggleSeedWindow(){
   toggleKeyboard();
 }
 
-function toggleKeyboard(){
+function toggleKeyboard(){ //toggle listener on/off for keyboard input
   isKeyboardActive = !isKeyboardActive;
   if (isKeyboardActive){
     window.addEventListener("keydown", keypressEvent, true);    
