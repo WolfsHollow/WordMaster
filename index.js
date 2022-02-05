@@ -223,7 +223,11 @@ function submitWord(){
       return;
     }
     else {
-      displayText('not a word');
+      displayText(`That's not an acceptable word`);
+      currentLetterBox = letterBox[currentBoxNum-1];
+      let wordContainer = currentLetterBox.parentElement;
+      wordContainer.classList.remove('shakeWord');
+      setTimeout(()=>{wordContainer.classList.add('shakeWord')}, 100); 
     return;
     }
   }
