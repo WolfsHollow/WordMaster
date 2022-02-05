@@ -1,9 +1,28 @@
-// get divs set up
+// get div variables set up
 const page = document.getElementById('page');
 const guessContainer = document.getElementById('guessContainer');
 const keyboardContainer = document.getElementById('keyboardContainer');
 let displayMessage = document.getElementById('displayMessage');
 
+//setup overlay for seeds
+const seedButton = document.getElementById('seedButton');
+const seedWindow = document.getElementById('seedWindow');
+let seedInput = document.getElementById('seedInput');
+const seedForm = document.getElementById('seedForm');
+let currentSeed = document.getElementById('currentSeedMessage');
+
+// use seed to get new word from input
+seedForm.onsubmit = () =>{let indices = getIndicesFromSeed(seedInput.value);
+  console.log(indices);
+  word = wordList[indices[0]][indices[1]].toUpperCase();
+  console.log(word);
+  displayText('Word changed successfully');
+  toggleSeedWindow();
+  return false;
+ };
+seedButton.addEventListener('click', toggleSeedWindow);
+
+//initialize variables
 let guessArray = [];
 let guessDivArray = [];
 let letterBox=[];
@@ -12,7 +31,14 @@ let currentGuess='';
 let guessNum = 0;
 let currentLetterBox = null;
 let currentBoxNum = 0;
+let word;
+let isKeyboardActive = true;
 
+const WORD_LENGTH = 5;
+const GUESSES = 6;
+const disabledKeys = ['Escape', 'Tab', 'Shift', 'CapsLock', 'Control', 'Meta', 'Alt', 'ContentMenu', 'NumLock', 'ScrollLock', 'Pause', 'Delete', 'End', 'PageDown', 'PageUp', 'Home', 'Insert', 'ArrowUp', 'ArrowLeft', 'ArrowDown','ArrowRight', '*', '+', ' ','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12', '`', '1','2','3','4','5','6','7','8','9','0','-', "`","'", '=', '[',']', '\\', ';', '/', '.', '\,'];
+
+// setup wordlist; not exhaustive list yet
 const wordList = [];
 
 wordList[0] = ["aback","abase","abate","abaya","abbey","abbot","abets","abhor","abide","abode","abort","about","above","abuse","abuts","abyss","ached","aches","acids","acing","ackee","acorn","acres","acrid","acted","actin","actor","acute","adage","adapt","added","adder","addle","adept","adieu","adios","adits","adman","admin","admit","adobe","adobo","adopt","adore","adorn","adult","adzes","aegis","aeons","aerie","affix","afire","afoot","afore","after","again","agape","agate","agave","agent","aggro","agile","aging","aglow","agony","agora","agree","ahead","ahold","aided","aider","aides","ailed","aimed","aimer","aioli","aired","aisle","alarm","album","alder","aleph","alert","algae","algal","alias","alibi","alien","align","alike","alive","alkyd","alkyl","allay","alley","allot","allow","alloy","allyl","aloes","aloft","aloha","alone","along","aloof","aloud","alpha","altar","alter","altos","alums","amass","amaze","amber","ambit","amble","ambos","amend","amide","amine","amino","amiss","amity","amnio","among","amour","amped","ample","amply","amuse","ancho","angel","anger","angle","angry","angst","anima","anime","anion","anise","ankle","annas","annex","annoy","annul","anode","anole","antic","antis","antsy","anvil","aorta","apace","apart","aphid","apnea","apple","apply","apron","apses","apter","aptly","aquas","arbor","ardor","areal","areas","areca","arena","argon","argot","argue","argus","arias","arils","arise","armed","armor","aroma","arose","array","arrow","arses","arson","artsy","asana","ascot","ashen","ashes","aside","asked","asker","askew","aspen","aspic","assay","asses","asset","aster","astir","asura","atlas","atman","atoll","atoms","atone","atopy","attic","audio","audit","auger","aught","augur","aunts","aunty","aural","auras","autos","auxin","avail","avers","avert","avian","avoid","avows","await","awake","award","aware","awash","awful","awoke","axels","axial","axils","axing","axiom","axion","axles","axons","azide","azole","azure"];
@@ -41,10 +67,6 @@ wordList[23] = ["wages","wagon","waist","walks","walls","wants","warns","waste",
 wordList[24] = ["yacht","yards","years","yeast","yield","young","yours","youth","yummy","zones"];
 // wordList[25] = []
 
-let word;
-const WORD_LENGTH = 5;
-const GUESSES = 6;
-const disabledKeys = ['Escape', 'Tab', 'Shift', 'CapsLock', 'Control', 'Meta', 'Alt', 'ContentMenu', 'NumLock', 'ScrollLock', 'Pause', 'Delete', 'End', 'PageDown', 'PageUp', 'Home', 'Insert', 'ArrowUp', 'ArrowLeft', 'ArrowDown','ArrowRight', '*', '+', ' ','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12', '`', '1','2','3','4','5','6','7','8','9','0','-', "`","'", '=', '[',']', '\\', ';', '/', '.', '\,'];
 
 function setup(){
   for (let j = 0; j<GUESSES*WORD_LENGTH; j++){
@@ -64,34 +86,39 @@ function setup(){
       guessDivArray[i].appendChild(letterBox[k]);
     }
   }
-  keyboardSetup();
+  keyboardSetup();  
   word = getWord();
   console.log(word);
 }
 
-function getWord(){
+function getWord(){ 
   let randomLetterIndex = getRandomNumber(0,25);
   let listLength = wordList[randomLetterIndex].length;
   let randomWordIndex = getRandomNumber(0, listLength);
+  let seed = generateSeed(randomLetterIndex, randomWordIndex);
+  currentSeedMessage.innerText = seed;
 
   return wordList[randomLetterIndex][randomWordIndex].toUpperCase();  
 }
 
-function getRandomNumber(min,max){ //taken from internet
+function getRandomNumber(min,max){ //taken from internet for RNG
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
-function keyboardSetup(){
-
+function keyboardSetup(){  //adds click event to on screen keyboard
   let keyBox = document.getElementsByClassName('key');
   for (let i = 0; i<keyBox.length; i++){
     keyBox[i].addEventListener('click', (event)=>{processKeyEvent(event)});
   } 
 }
 
-function processKeyEvent(event){
+function keypressEvent(event){
+  processKeyEvent(event);
+}
+
+function processKeyEvent(event){ 
   if (guessNum <=5){
     keyPressed = event.key;
     if (event.key === undefined){
@@ -118,12 +145,12 @@ function processKeyEvent(event){
   }
 }
 
-function nextBox(){ // move to next box
+function nextBox(){ 
   currentBoxNum +=1;
   currentLetterBox = letterBox[currentBoxNum];
 }
 
-function previousBox(){ //move to previous box and clear it
+function previousBox(){ 
   if (!currentGuess == ''){
     currentBoxNum -=1;
     currentLetterBox = letterBox[currentBoxNum];
@@ -132,13 +159,13 @@ function previousBox(){ //move to previous box and clear it
   }
 }
 
-function displayKey(key){ // put keypress in box
+function displayKey(key){ 
   key = key.toUpperCase();
   currentLetterBox.innerText = key;
   currentGuess += key;
 }
 
-function checkWord(){
+function checkWord(){ 
   giveHints();
   if (currentGuess == word){    
     displayText('You win!');
@@ -148,7 +175,7 @@ function checkWord(){
   }
 }
 
-function giveHints(){
+function giveHints(){ // colors keys and boxes for hints
   firstLetterBox = guessNum*5;  
   let keyDiv;
   let color;
@@ -165,13 +192,13 @@ function giveHints(){
     else{
       color = 'grey'
       
-    }
-        
+    }       
     
-    console.log(keyDiv.style.border);
     let card = currentLetterBox;
     let cardColor = color;
     let keyboardKey = keyDiv;
+
+    //add timer to animate sequentially
     setTimeout(()=>{card.classList.add('flipLetter');
                     card.style.backgroundColor = cardColor;
                     card.style.border = `2px solid ${cardColor}`;
@@ -183,7 +210,7 @@ function giveHints(){
   }
 }
 
-function submitWord(){
+function submitWord(){  
   if (currentGuess.length == 5){
     checkWord();
     guessNum+=1;
@@ -192,23 +219,85 @@ function submitWord(){
     currentLetterBox = letterBox[currentBoxNum];
     return;
   }
-  else{
+  else if (currentGuess.length != 5){
     displayText('Not enough letters in word');
     let wordContainer = currentLetterBox.parentElement;
     wordContainer.classList.remove('shakeWord');
     setTimeout(()=>{wordContainer.classList.add('shakeWord')}, 100); 
     return;
   }
+  else {
+    displayText('not a word');
+    return;
+  }
 }
 
-function displayText(message){
+function displayText(message){ 
   displayMessage.innerText = message;
   displayMessage.classList.add('show');
   setTimeout(()=>{displayMessage.classList.remove('show')}, 2000);
 }
 
-setup();
+function generateSeed(letterNum, wordNum){ 
+  
+  let wordNumDigits;
+  wordNum = wordNum.toString();
+  
+  //insert random numbers to obscure word letter
+  let firstRanDigits = getRandomNumber(1,10);  
+  let secondRanDigits = getRandomNumber(0,10);
+  let thirdRanDigits = getRandomNumber(0,10);
 
-window.addEventListener("keydown", (event)=>{ //process keypresses
- processKeyEvent(event)    
-}, true);
+  //add 0's to keep number length
+  let letterNumDigits = ("0" + letterNum).slice(-2);
+  if (wordNum.length == 1){
+    wordNumDigits = ("00" + wordNum).slice(-3);
+  }
+  else if (wordNum.length == 2){
+    wordNumDigits = ("0" + wordNum).slice(-3);
+  }
+  else {
+    wordNumDigits = wordNum;
+  }
+  
+  //put seed together, X###XX##X
+  let seed = firstRanDigits + wordNumDigits + secondRanDigits + letterNumDigits + thirdRanDigits;
+  
+  return seed;
+}
+
+function getIndicesFromSeed(seed){  
+  if (seed >= 10000000 && seed < 99999999){
+    let wordNum = seed.slice(1,4);
+    let letterNum = seed.slice(5,7);
+    wordNum = Number(wordNum);
+    letterNum = Number(letterNum);
+    return [letterNum, wordNum];
+  }
+}
+
+function toggleSeedWindow(){
+  let classes = seedWindow.classList;
+  if (classes.contains('show')){
+    classes.remove('show');
+  }
+  else {
+    classes.add('show');
+  }
+  toggleKeyboard();
+}
+
+function toggleKeyboard(){ //toggle listener on/off for keyboard input
+  isKeyboardActive = !isKeyboardActive;
+  if (isKeyboardActive){
+    window.addEventListener("keydown", keypressEvent, true);    
+    console.log('added event');
+  }
+  else if (isKeyboardActive == false){
+    window.removeEventListener("keydown", keypressEvent, true);
+    console.log('removed event');
+  }  
+}
+
+setup();
+window.addEventListener("keydown", keypressEvent, true); //process keys
