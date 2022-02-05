@@ -6,8 +6,16 @@
   <script src="index.js" defer></script>
   <link rel="stylesheet" type="text/css" href="style.css">  
 </head>
-<body id='page'>
+<body id='page'>  
   <div id='displayMessage'></div>
+  <div id='seedWindow'>
+    <form id = 'seedForm'>
+      <div id='currentSeed'>Current Seed: 
+        <div id='currentSeedMessage'></div>
+      </div>
+      <label>Enter Seed <input id='seedInput' minlength='8' maxlength='8' type='number'></input></label>
+    </form>
+  </div>
   <div id='guessContainer'></div>
   <div id='keyboardContainer'>
     <div class="keyboard">
@@ -45,6 +53,10 @@
         <div id='m' class='key'>M</div>  
         <div id ='backspace' class='bigKey key' value = 'backspace'>Back</div>
       </div>
+    </div>
+    <div id='buttonContainer'>
+      <button id = 'seedButton' class = 'seed button'>Seed</button>
+      <button class = 'settings button'>Settings</button>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body> 

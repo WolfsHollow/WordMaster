@@ -27,6 +27,26 @@ body{
   display: flex;
 }
 
+#seedWindow.show{
+  display: flex;
+}
+
+#seedWindow{
+  display: none;
+  z-index: 5;
+  position: absolute;
+  top: 150px;
+  justify-content: center;
+  align-self: center;
+  height: 300px;
+  width: 400px;
+  line-height: 50px;
+  background-color: black;
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+}
+
 #guessContainer{
   display: flex;
   flex-flow: column;
@@ -140,4 +160,21 @@ body{
   50%{
     transform: rotateX(90deg);
   }
+}
+
+#buttonContainer{
+  height: 100px;
+  width: 100%;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button{
+  height: 40px;
+  width: 80px;
+  text-align: center;
+  justify-content: center;
+  align-self: center;
 }
