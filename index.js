@@ -13,10 +13,10 @@ let currentSeed = document.getElementById('currentSeedMessage');
 
 // use seed to get new word from input
 seedForm.onsubmit = () =>{let indices = getIndicesFromSeed(seedInput.value);
-  console.log(indices);
   word = wordList[indices[0]][indices[1]].toUpperCase();
   console.log(word);
   displayText('Word changed successfully');
+  currentSeed.innerText = seedInput.value;
   toggleSeedWindow();
   return false;
  };
@@ -37,7 +37,10 @@ let isKeyboardActive = true;
 const WORD_LENGTH = 5;
 const GUESSES = 6;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const disabledKeys = ['Escape', 'Tab', 'Shift', 'CapsLock', 'Control', 'Meta', 'Alt', 'ContentMenu', 'NumLock', 'ScrollLock', 'Pause', 'Delete', 'End', 'PageDown', 'PageUp', 'Home', 'Insert', 'ArrowUp', 'ArrowLeft', 'ArrowDown','ArrowRight', '*', '+', ' ','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12', '`', '1','2','3','4','5','6','7','8','9','0','-', "`","'", '=', '[',']', '\\', ';', '/', '.', '\,'];
+
+// //New word button and setup
+// const newWordButton = document.getElementById('newWord');
+// newWordButton.onsubmit = resetGame();
 
 // setup wordlist; not exhaustive list yet
 const wordList = [];
@@ -67,7 +70,6 @@ wordList[22] = ["vague","valid","value","valve","vapor","vault","vegan","veins",
 wordList[23] = ["wages","wagon","waist","walks","walls","wants","warns","waste","watch","water","watts","waves","wears","weeds","weeks","weigh","weird","wells","welsh","whale","wheat","wheel","where","which","while","white","whole","whose","wider","widow","width","winds","wines","wings","wiped","wired","wires","witch","wives","woman","women","woods","words","works","world","worms","worry","worse","worst","worth","would","wound","wrath","wrist","write","wrong","wrote"];
 wordList[24] = ["yacht","yards","years","yeast","yield","young","yours","youth","yummy","zones"];
 // wordList[25] = []
-
 
 function setup(){
   for (let j = 0; j<GUESSES*WORD_LENGTH; j++){
@@ -122,7 +124,7 @@ function keypressEvent(event){
 function processKeyEvent(event){ 
   if (guessNum <=5){
     keyPressed = event.key;
-    if (event.key === undefined){
+    if (event.key === undefined){ //through onscreen keyboard input
       keyPressed = event.target.innerText;
     }
     if (keyPressed == 'Enter'){
@@ -134,13 +136,20 @@ function processKeyEvent(event){
       return;
     }
     else if (currentGuess.length <5){
-      if (disabledKeys.includes(keyPressed)){
-        console.log('that not allowed');
-        return;
-      }
-      else{
+      // if (disabledKeys.includes(keyPressed)){
+      //   return;
+      // }
+      // else{
+      //   displayKey(keyPressed);
+      //   nextBox();
+      // }
+      keyPressed = keyPressed.toUpperCase();
+      if (ALPHABET.indexOf(keyPressed)>=0){
         displayKey(keyPressed);
         nextBox();
+      }
+      else {
+        return;
       }
     }
   }
@@ -312,6 +321,15 @@ function toggleKeyboard(){ //toggle listener on/off for keyboard input
     window.removeEventListener("keydown", keypressEvent, true);
     console.log('removed event');
   }  
+}
+
+function resetGame(){
+  for (let j = 0; j<GUESSES*WORD_LENGTH; j++){
+    letterBox[j].style.backgroundColor = 'linear-gradient(#141e30, #243b55);';
+    letterBox[j].style.border = '2px solid #E6E6E6';
+  }  
+
+  word = getWord();
 }
 
 setup();
