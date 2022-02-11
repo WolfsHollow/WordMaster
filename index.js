@@ -42,32 +42,39 @@ settingsSubmit.addEventListener('click', () =>{isEnduranceActive = enduranceSlid
 const statsButton = document.getElementById('statsButton');
 const statsWindow = document.getElementById('statsWindow');
 const chart = document.getElementById('guessChart');
+const streakDiv = document.getElementById('streakDiv');
+const winLossDiv = document.getElementById('winLoss');
 let guessNumCount = [0,0,0,0,0,0,0]; //[oneGuesses,twoGuesses,..., losses]
+
+// winLossDiv.innerText = `Wins/Loss - ${}`
 
 let gameCount = 0;
 let streak = 0;
+streakDiv.innerText = `Current Streak: ${streak}`;
 
-var xValues = ["1", "2", "3", "4", "5", "6", "Loss"];
-var yValues = guessNumCount;
-var barColors = ["red", "green","blue","orange","brown","purple", 'white'];
+let yValues = ["1", "2", "3", "4", "5", "6", "Loss"];
+let xValues = guessNumCount;
+let barColors = ["red", "green","blue","orange","brown","purple", 'white'];
 
 let guessChart = new Chart(chart, {
-  type: "bar",
+  type: "horizontalBar",
   data: {
-    labels: xValues,
+    labels: yValues,
     datasets: [{
       backgroundColor: barColors,
-      data: yValues
+      data: xValues
     }]
   },
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
     legend: {display: false},
     title: {
       display: true,
       text: "Wins"
     },
-    scales: {      
-      yAxes: [{
+    scales: {     
+      xAxes: [{
         ticks: {
           beginAtZero: true,
           callback: function(value) {if (value % 1 === 0) {return value;}}
@@ -209,6 +216,7 @@ function checkWord(){
   if (currentGuess == word){    
     displayText('You win!');
     streak+=1;
+    streakDiv.innerText = `Current Streak: ${streak}`;
     guessNumCount[guessNum]+=1;
     gameCount +=1;
     guessChart.update();
@@ -219,8 +227,10 @@ function checkWord(){
   else if (guessNum == 5){
     displayText(`The word was ${word}`);
     streak = 0;
+    streakDiv.innerText = `Current Streak: ${streak}`;
     guessNumCount[6] +=1;
     gameCount +=1;
+    guessChart.update();
   }  
 }
 
