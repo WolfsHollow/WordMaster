@@ -7,9 +7,10 @@ let displayMessage = document.getElementById('displayMessage');
 //setup overlay for seeds
 const seedButton = document.getElementById('seedButton');
 const seedWindow = document.getElementById('seedWindow');
-let seedInput = document.getElementById('seedInput');
+const seedInput = document.getElementById('seedInput');
 const seedForm = document.getElementById('seedForm');
-let currentSeed = document.getElementById('currentSeedMessage');
+const currentSeed = document.getElementById('currentSeedMessage');
+const seedClose = document.getElementById('seedClose');
 
 // use seed to get new word from input
 seedForm.onsubmit = () =>{let indices = getIndicesFromSeed(seedInput.value);
@@ -19,8 +20,9 @@ seedForm.onsubmit = () =>{let indices = getIndicesFromSeed(seedInput.value);
   currentSeed.innerText = seedInput.value;
   toggleSeedWindow();
   return false;
- };
+};
 seedButton.addEventListener('click', (e)=> {toggleWindow(seedWindow); e.target.blur()});
+seedClose.addEventListener('click', (e)=> {toggleWindow(seedWindow); e.target.blur()});
 
 //settings window setup
 const settingsButton = document.getElementById('settingsButton');
@@ -29,14 +31,10 @@ const settingsForm = document.getElementById('settingsForm');
 const enduranceSlider = document.getElementById('enduranceSlider');
 const hardmodeSlider = document.getElementById('hardmodeSlider');
 const colorBlindSlider = document.getElementById('colorblindSlider');
-const settingsSubmit = document.getElementById('settingsSubmit');
+const settingsClose = document.getElementById('settingsClose');
 
 settingsButton.addEventListener('click', (e) =>{toggleWindow(settingsWindow), e.target.blur()});
-settingsSubmit.addEventListener('click', () =>{isEnduranceActive = enduranceSlider.checked;
-                                               isHardModeActive = hardmodeSlider.checked; 
-                                               isColorBlindActive = colorBlindSlider.checked; 
-                                               displayText('Settings Saved');
-                                              });
+settingsClose.addEventListener('click', (e) =>{toggleWindow(settingsWindow), e.target.blur()});
 
 //stats window setup
 const statsButton = document.getElementById('statsButton');
@@ -44,6 +42,7 @@ const statsWindow = document.getElementById('statsWindow');
 const chart = document.getElementById('guessChart');
 const streakDiv = document.getElementById('streakDiv');
 const winLossDiv = document.getElementById('winLoss');
+const statsClose = document.getElementById('statsClose');
 let guessNumCount = [0,0,0,0,0,0,0]; //[oneGuesses,twoGuesses,..., losses]
 
 // winLossDiv.innerText = `Wins/Loss - ${}`
@@ -80,11 +79,12 @@ let guessChart = new Chart(chart, {
           callback: function(value) {if (value % 1 === 0) {return value;}}
         }
       }]
-     }    
+    }    
   }
 });
 
 statsButton.addEventListener('click', (e) => {toggleWindow(statsWindow), e.target.blur()});
+statsClose.addEventListener('click', (e) => {toggleWindow(statsWindow), e.target.blur()});
 
 //initialize variables
 let guessArray = [];
@@ -99,6 +99,7 @@ let word;
 let isKeyboardActive = true;
 let isEnduranceActive = false;
 let isHardModeActive = false;
+let isColorBlindActive = false;
 let hmWord = ['-','-','-','-','-'];
 
 const WORD_LENGTH = 5;
@@ -106,6 +107,10 @@ const GUESSES = 6;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 //Setup page
+
+enduranceSlider.addEventListener('click',()=>{isEnduranceActive = !isEnduranceActive});
+hardmodeSlider.addEventListener('click',()=>{isHardModeActive = !isHardModeActive});
+colorBlindSlider.addEventListener('click',()=>{displayText('not currently implemented'); isColorBlindActive = !isColorBlindActive});
 setup();
 window.addEventListener("keydown", keypressEvent, true); //process keys
 
