@@ -1,4 +1,4 @@
-//initialize variables
+//initialize variables/
 let guessArray = [];
 let guessDivArray = [];
 let letterBox=[];
