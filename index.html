@@ -5,6 +5,7 @@
   <meta charset="UTF-8"/>
   <script src="wordlist.js" defer></script>
   <script src="index.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">  
 </head>
 <body id='page'>
@@ -16,6 +17,31 @@
        </div>
        <label>Enter Seed <input id='seedInput' maxlength = '8' minlength = '8' type='number'></input></label>
     </form>
+  </div>
+  <div id='settingsWindow'>
+      <div id = 'settingsForm'>Settings
+        <label>Endurance mode <label class="switch">
+            <input id='enduranceSlider' type="checkbox">
+            <span class="slider round"></span>
+           </label></label>
+        <label>Hard mode <label class="switch">
+            <input id='hardmodeSlider' type="checkbox">
+            <span class="slider round"></span>
+           </label></label>
+        <label>Color blind mode <label class="switch">
+          <input id='colorblindSlider' type="checkbox">
+          <span class="slider round"></span>
+          </label></label>      
+        <label>Theme <select name="Theme" id="theme">
+          <option value="Dark">Dark (Default)</option>
+          <option value="Wordle">Light (Wordle)</option>
+          <option value="Darker">Darker (Darker)</option>
+        </select></label>
+        <button id='settingsSubmit' type='submit'>Save</button>
+      </div>
+  </div>
+  <div id = 'statsWindow'> Stats
+    <canvas id="guessChart" style="width:100%;max-width:700px"></canvas>
   </div>
   <div id='guessContainer'></div>
   <div id='keyboardContainer'>
@@ -58,7 +84,8 @@
     <div id='buttonContainer'>
       <button id = 'newWord' class = 'newWord button'>New Word</button>
       <button id = 'seedButton' class = 'seed button'>Seed</button>
-      <button class = 'settings button'>Settings</button>      
+      <button id = 'settingsButton' class = 'settings button'>Settings</button> 
+      <button id = 'statsButton' class = 'stats button'>Stats</button>
     </div>
 </body> 
 </html>
