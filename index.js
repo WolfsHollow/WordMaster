@@ -1,3 +1,23 @@
+//initialize variables
+let guessArray = [];
+let guessDivArray = [];
+let letterBox=[];
+let letterBoxDivArray = [];
+let currentGuess='';
+let guessNum = 0;
+let currentLetterBox = null;
+let currentBoxNum = 0;
+let word;
+let isKeyboardActive = true;
+let isEnduranceActive = false;
+let isHardModeActive = false;
+let isColorBlindActive = false;
+let hmWord = ['-','-','-','-','-'];
+
+const WORD_LENGTH = 5;
+const GUESSES = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 // get div variables set up
 const page = document.getElementById('page');
 const guessContainer = document.getElementById('guessContainer');
@@ -85,26 +105,6 @@ let guessChart = new Chart(chart, {
 
 statsButton.addEventListener('click', (e) => {toggleWindow(statsWindow), e.target.blur()});
 statsClose.addEventListener('click', (e) => {toggleWindow(statsWindow), e.target.blur()});
-
-//initialize variables
-let guessArray = [];
-let guessDivArray = [];
-let letterBox=[];
-let letterBoxDivArray = [];
-let currentGuess='';
-let guessNum = 0;
-let currentLetterBox = null;
-let currentBoxNum = 0;
-let word;
-let isKeyboardActive = true;
-let isEnduranceActive = false;
-let isHardModeActive = false;
-let isColorBlindActive = false;
-let hmWord = ['-','-','-','-','-'];
-
-const WORD_LENGTH = 5;
-const GUESSES = 6;
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 //Setup page
 
