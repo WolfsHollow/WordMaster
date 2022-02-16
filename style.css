@@ -30,13 +30,16 @@ body{
   top: 50px;
   justify-content: center;
   align-self: center;
-  height: 50px;
-  width: 400px;
+  min-height: 50px;
+  min-width: 400px;
+  height: auto;
+  width: auto;
   line-height: 50px;
   background-color: var(--displayMessageBackground, black);
   color: var(--displayTextColor, white);
   font-size: 2rem;
   text-align: center;
+  overflow: auto;
 }
 
 #seedWindow{
