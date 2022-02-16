@@ -13,6 +13,9 @@ let isEnduranceActive = false;
 let isHardModeActive = false;
 let isColorBlindActive = false;
 let hmWord = ['-','-','-','-','-'];
+let boxColorAbsent = 'grey';
+let boxColorCorrect = 'green';
+let boxColorPresent = 'gold';
 
 const WORD_LENGTH = 5;
 const GUESSES = 6;
@@ -23,6 +26,8 @@ const page = document.getElementById('page');
 const guessContainer = document.getElementById('guessContainer');
 const keyboardContainer = document.getElementById('keyboardContainer');
 let displayMessage = document.getElementById('displayMessage');
+const root = document.querySelector(':root');
+
 
 //setup overlay for seeds
 const seedButton = document.getElementById('seedButton');
@@ -52,9 +57,56 @@ const enduranceSlider = document.getElementById('enduranceSlider');
 const hardmodeSlider = document.getElementById('hardmodeSlider');
 const colorBlindSlider = document.getElementById('colorblindSlider');
 const settingsClose = document.getElementById('settingsClose');
+const themeDropdown = document.getElementById('theme');
 
+themeDropdown.onchange = ()=>{themeChange(themeDropdown.value)};
 settingsButton.addEventListener('click', (e) =>{toggleWindow(settingsWindow), e.target.blur()});
 settingsClose.addEventListener('click', (e) =>{toggleWindow(settingsWindow), e.target.blur()});
+
+function themeChange(theme){
+  switch (theme){
+    case 'Dark':
+      root.style.setProperty('--background', 'linear-gradient(#141e30, #243b55)');
+      root.style.setProperty('--textColor','white');
+      root.style.setProperty('--displayTextColor','white');
+      root.style.setProperty('--menuTextColor','white');
+      root.style.setProperty('--keyColor', 'lightgrey');
+      root.style.setProperty('--borderColor', '#E6E6E6');
+      root.style.setProperty('--displayMessageBackground', 'black');
+      root.style.setProperty('--menuBorderColor', 'black');
+      boxColorPresent = 'gold';
+      boxColorCorrect = 'green';
+      boxColorAbsent = 'grey';
+      break;
+    case 'Wordle':
+      root.style.setProperty('--background', `linear-gradient('#FFFFFF', '#000000')`);
+      root.style.setProperty('--textColor', 'black');
+      root.style.setProperty('--displayTextColor','black');
+      root.style.setProperty('--menuTextColor','black');
+      root.style.setProperty('--keyColor', 'green');
+      root.style.setProperty('--borderColor', '#d3d6da');
+      root.style.setProperty('--displayMessageBackground', 'white');
+      root.style.setProperty('--menuBorderColor', 'black');
+      boxColorPresent = '#c9b458';
+      boxColorCorrect = '#6aaa64';
+      boxColorAbsent = '#787c7e';      
+      break;
+    case 'Darker':
+      root.style.setProperty('--background', 'linear-gradient(#000000, #0e2642)');
+      root.style.setProperty('--textColor','lightgrey');
+      root.style.setProperty('--displayTextColor','lightgrey');
+      root.style.setProperty('--menuTextColor','lightgrey');
+      root.style.setProperty('--keyColor', 'darkgrey');
+      root.style.setProperty('--borderColor', '#8d8d8d');
+      root.style.setProperty('--displayMessageBackground', 'black');
+      root.style.setProperty('--menuBorderColor', 'black');
+      boxColorPresent = '#b59feb';
+      boxColorCorrect = '#538d4e';
+      boxColorAbsent = '#3a3a3c';
+      break;
+  }
+  console.log(`theme changed`);
+}
 
 //stats window setup
 const statsButton = document.getElementById('statsButton');
@@ -143,6 +195,7 @@ function setup(){
 
 function getWord(){ 
   let randomLetterIndex = getRandomNumber(0,25);
+  console.log(randomLetterIndex, wordList[randomLetterIndex].length)
   let listLength = wordList[randomLetterIndex].length;
   let randomWordIndex = getRandomNumber(0, listLength);
   let seed = generateSeed(randomLetterIndex, randomWordIndex);
@@ -211,6 +264,8 @@ function previousBox(){
 
 function displayKey(key){ 
   currentLetterBox.innerText = key;
+  // currentLetterBox.classList.add('letterPop');
+  // setTimeout(()=>{currentLetterBox.classList.remove('letterPop')}, 30);
   if (currentGuess.length <5){
     currentGuess += key;
   }
@@ -275,14 +330,14 @@ function giveHints(){ // colors keys and boxes for hints
     keyDiv = document.getElementById(currentGuess[i]);
 
     if (word[i] == currentGuess[i]){
-      color = 'green';
+      color = boxColorCorrect;
       hmWord[i] = currentGuess[i];
     }
     else if (word.indexOf(currentGuess[i]) > -1){
-      color = 'gold'
+      color = boxColorPresent
     }
     else{
-      color = 'grey'      
+      color = boxColorAbsent      
     }       
     
     let card = currentLetterBox;
